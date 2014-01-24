@@ -1,0 +1,10 @@
+__pycache__
+build
+log
+*.pyc
+*.bin
+*.log
+*.txt
+*.bat
+*.json
+*.zip

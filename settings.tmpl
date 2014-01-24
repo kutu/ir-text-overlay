@@ -1,0 +1,75 @@
+{
+	"lap_ses": {
+	},
+
+	"position": {
+		// char for previous car
+		"down_arrow": "\u25bc",
+		// char for for current camera car
+		"square": "\u25a0",
+		// char for next car
+		"up_arrow": "\u25b2"
+	},
+
+	"rpm_speed": {
+		// rpm will build with this chars
+		"blocks": [
+			" ",
+			"\u258c",
+			"\u2588"
+		],
+		// char, left-rigth border of rpm
+		"vertical_line": "\u2502"
+	},
+
+	"standing": {
+		// maximum lines to show (max + 1 for header)
+		"max": 24,
+
+		// When standings more then max, it will split it in two parts
+		// window value should be odd (3, 5, 7)
+		"window": 5,
+
+		// char to show current camera position
+		"right_arrow": "\u25ba",
+
+		// split standings in two parts with this char
+		"horizontal_bar": "\u2500"
+	},
+
+	"twitch": {
+		// Your channel name, case-insensitive
+		"channel": "",
+
+		// You can specify access_token, to automagically update you twtich stream status
+		//
+		// To get access_token:
+		// 1. create twitch application here
+		//    http://www.twitch.tv/kraken/oauth2/clients/new
+		//    Name: doesn't matter
+		//    Redirect URL: http://localhost
+		// 2. after create application, you will get "Client ID"
+		// 3. replace <CLIENT_ID> in next url with your own, and go to that url in your browser
+		//    https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=<CLIENT_ID>&redirect_uri=http://localhost&scope=channel_editor
+		// 4. you will be redirected to something like this:
+		//    http://localhost/#access_token=qwe...asd&scope=channel_editor
+		// 5. now you can copy-paste that "access_token" value to here
+		"access_token": "",
+
+		// Viewers/Followers counter template
+		// {0} - viewers counter
+		// {1} - followers counter
+		"viewers_followers_tmpl": "Viewers: {0} Followers: {1}",
+
+		// Latest follower template
+		// {0} - latest follower nickname
+		"lates_follower_tmpl": "ALL HAIL latest follower: {0}",
+
+		// Stream status template
+		// {0} - EventType
+		// {1} - CarClassShortName
+		// {2} - TrackDisplayShortName
+		// note: will work only with access_token
+		"status_tmpl": "{0}: {1} @ {2}"
+	}
+}
