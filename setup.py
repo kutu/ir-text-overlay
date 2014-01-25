@@ -28,7 +28,7 @@ setup(name='ir-text-overlay',
       options = dict(build_exe = buildOptions),
       executables = executables)
 
-zf = zipfile.ZipFile('ir-text-overlay-%s.zip' % VERSION, 'w', zipfile.ZIP_LZMA)
+zf = zipfile.ZipFile('ir-text-overlay-%s.zip' % VERSION, 'w', zipfile.ZIP_DEFLATED)
 for dirname, _, files in os.walk('build/exe.win32-3.3'):
     for filename in files:
         zf.write(os.path.join(dirname, filename), filename)
