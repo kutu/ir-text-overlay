@@ -275,7 +275,7 @@ def update_position():
         # drivers_by_position = [d for d in drivers_by_position if d['driver_info']['CarClassID'] == cur_car_class_id]
 
         cur_pos = drivers_by_position.index(state.drivers[state.cam_car_idx])
-        pos_format = '{2:>15} {1} {3:3} #{0[driver_info][CarNumber]:>3}{0[license_class]:>2}{0[safety_rating]} iR{0[driver_info][IRating]:>4} {0[driver_info][UserName]}'
+        pos_format = settings['position']['position_tmpl']
 
         # next
         if cur_pos == 0:
@@ -294,8 +294,15 @@ def update_position():
                         diff_time = 'Last {:.0f}:{:06.3f}'.format(*divmod(last_time, 60))
                     elif fastest_time != -1:
                         diff_time = '{:.0f}:{:06.3f}'.format(*divmod(fastest_time, 60))
-            position.append(pos_format.format(driver, settings['position']['up_arrow'], diff_time,
-                'P{0[class_position]:2}'.format(driver) if driver['class_position'] > 0 else ''))
+            position.append(pos_format.format(
+                diff_time,
+                settings['position']['up_arrow'],
+                'P{0[class_position]:2}'.format(driver) if driver['class_position'] > 0 else '',
+                driver['driver_info']['CarNumber'],
+                driver['license_class'],
+                driver['safety_rating'],
+                driver['driver_info']['IRating'],
+                driver['driver_info']['UserName']))
 
         # me
         driver = drivers_by_position[cur_pos]
@@ -312,8 +319,15 @@ def update_position():
                 elif fastest_time != -1:
                     lap_time = '{:.0f}:{:06.3f}'.format(*divmod(fastest_time, 60))
 
-        position.append(pos_format.format(driver, settings['position']['square'], lap_time,
-            'P{0[class_position]:2}'.format(driver) if driver['class_position'] > 0 else ''))
+        position.append(pos_format.format(
+                lap_time,
+                settings['position']['square'],
+                'P{0[class_position]:2}'.format(driver) if driver['class_position'] > 0 else '',
+                driver['driver_info']['CarNumber'],
+                driver['license_class'],
+                driver['safety_rating'],
+                driver['driver_info']['IRating'],
+                driver['driver_info']['UserName']))
 
         # prev
         if cur_pos == len(drivers_by_position) - 1 or not 'position_info' in drivers_by_position[cur_pos + 1]:
@@ -332,8 +346,15 @@ def update_position():
                         diff_time = 'Last {:.0f}:{:06.3f}'.format(*divmod(last_time, 60))
                     elif fastest_time != -1:
                         diff_time = '{:.0f}:{:06.3f}'.format(*divmod(fastest_time, 60))
-            position.append(pos_format.format(driver, settings['position']['down_arrow'], diff_time,
-                'P{0[class_position]:2}'.format(driver) if driver['class_position'] > 0 else ''))
+            position.append(pos_format.format(
+                diff_time,
+                settings['position']['down_arrow'],
+                'P{0[class_position]:2}'.format(driver) if driver['class_position'] > 0 else '',
+                driver['driver_info']['CarNumber'],
+                driver['license_class'],
+                driver['safety_rating'],
+                driver['driver_info']['IRating'],
+                driver['driver_info']['UserName']))
 
     result = '\n'.join(position)
     logging.debug('\n%s', result)
