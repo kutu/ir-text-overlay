@@ -191,9 +191,12 @@ def update_lap_ses_time():
         lap =  ir['CarIdxLap'][state.cam_car_idx]
 
     if not session_time is None:
-        session_time = '{}:{:02}'.format(*(math.floor(x) for x in divmod(session_time, 60)))
+        m, s = divmod(int(session_time), 60)
+        h, m = divmod(m, 60)
+        session_time = '{}:{:02}:{:02}'.format(h, m, s) if h else '{}:{:02}'.format(m, s)
         if state.session_time != -1:
-            session_time += '/{}:{:02}'.format(*(math.floor(x) for x in divmod(state.session_time, 60)))
+            h, m = divmod(int(state.session_time / 60), 60)
+            session_time += '/{}h{:02}m'.format(h, m) if h else '/{}m'.format(m)
 
     if not lap is None and not state.session_laps is None:
         if lap < 1 or (ir['IsReplayPlaying'] and ir['ReplayFrameNumEnd'] > 10):
