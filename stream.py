@@ -11,7 +11,7 @@ import json
 import irsdk
 import twitch
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 LICENSE_CLASSES = ['R', 'D', 'C', 'B', 'A', 'P', 'WC']
 
@@ -396,37 +396,53 @@ def update_standing():
             if is_cur_session_race:
                 leader_pos_info = drivers_by_position[0]['position_info']
                 leader_last_lap_time = leader_pos_info['LastTime']
+
+                car_idx = driver['position_info']['CarIdx']
+                is_in_pit = ir['CarIdxOnPitRoad'][car_idx]
+                laps_complete = driver_pos_info['LapsComplete']
+
                 if i == 0:
-                    diff_time = '{:>5} {:5}'.format('LAP', leader_pos_info['LapsComplete'])
+                    diff_time = '{:>5} {:5}'.format('LAP', 'PIT' if is_in_pit else laps_complete)
                 else:
                     prev_driver_pos_info = drivers_by_position[i - 1]['position_info']
-                    laps_complete = driver_pos_info['LapsComplete']
                     diff_laps = leader_pos_info['LapsComplete'] - laps_complete
                     diff_laps_rel = prev_driver_pos_info['LapsComplete'] - laps_complete
 
-                    if laps_complete:
-                        gap = driver_pos_info['Time'] - leader_pos_info['Time']
-                    else:
-                        gap = driver_pos_info['Time']
+                    gap = driver_pos_info['Time'] - leader_pos_info['Time']
                     gap_str = ''
 
-                    if diff_laps <= 0 or (diff_laps == 1 and (leader_last_lap_time == -1 or 0 <= gap <= leader_last_lap_time)):
-                        gap_str = '{:.1f}'.format(gap)
-                    else:
+                    if gap >= 0 and laps_complete:
+                        if diff_laps <= 0 or \
+                            (diff_laps == 1 and (leader_last_lap_time == -1 or gap < leader_last_lap_time)):
+                            gap_str = '{:.1f}'.format(gap)
+                        elif ir['SessionState'] < irsdk.SessionState.CHECKERED and \
+                            diff_laps > 0 and leader_last_lap_time != -1 and \
+                            math.ceil(gap / leader_last_lap_time) == diff_laps:
+                            gap_str = '{:4}L'.format(diff_laps - 1)
+                        elif diff_laps > 0:
+                            gap_str = '{:4}L'.format(diff_laps)
+
+                    if not gap_str and diff_laps > 1:
                         gap_str = '{:4}L'.format(diff_laps)
 
                     inter = driver_pos_info['Time'] - prev_driver_pos_info['Time']
                     inter_str = ''
 
-                    car_idx = driver['position_info']['CarIdx']
-                    is_in_pit = ir['CarIdxOnPitRoad'][car_idx]
-
                     if is_in_pit:
                         inter_str = 'PIT'
                     elif inter >= 0 and laps_complete:
-                        inter_str = '{:.1f}'.format(inter)
-                    else:
-                        inter_str = '{:4}L'.format(diff_laps_rel) if diff_laps_rel > 0 else ''
+                        if diff_laps_rel <= 0 or \
+                            (diff_laps_rel == 1 and (leader_last_lap_time == -1 or inter < leader_last_lap_time)):
+                            inter_str = '{:.1f}'.format(inter)
+                        elif ir['SessionState'] < irsdk.SessionState.CHECKERED and \
+                            diff_laps_rel > 0 and leader_last_lap_time != -1 and \
+                            math.ceil(inter / leader_last_lap_time) == diff_laps_rel:
+                            inter_str = '{:4}L'.format(diff_laps_rel - 1)
+                        elif diff_laps_rel > 0:
+                            inter_str = '{:4}L'.format(diff_laps_rel)
+
+                    if not inter_str and diff_laps_rel > 1:
+                        inter_str = '{:4}L'.format(diff_laps_rel)
 
                     diff_time = '{:>5} {:>5}'.format(gap_str, inter_str)
             else:
