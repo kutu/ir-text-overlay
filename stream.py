@@ -402,7 +402,7 @@ def update_standing():
                 laps_complete = driver_pos_info['LapsComplete']
 
                 if i == 0:
-                    diff_time = '{:>5} {:5}'.format('LAP', 'PIT' if is_in_pit else laps_complete)
+                    diff_time = '{:>5} {:>5}'.format('LAP', 'PIT' if is_in_pit else laps_complete)
                 else:
                     prev_driver_pos_info = drivers_by_position[i - 1]['position_info']
                     diff_laps = leader_pos_info['LapsComplete'] - laps_complete
