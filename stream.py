@@ -196,7 +196,12 @@ def update_lap_ses_time():
         session_time = '{}:{:02}:{:02}'.format(h, m, s) if h else '{}:{:02}'.format(m, s)
         if state.session_time != -1:
             h, m = divmod(int(state.session_time / 60), 60)
-            session_time += '/{}h{:02}m'.format(h, m) if h else '/{}m'.format(m)
+            if h or m:
+                session_time += '/'
+            if h:
+                session_time += '{}h'.format(h)
+            if m:
+                session_time += '{:02}m'.format(m) if h else '{}m'.format(m)
 
     if not lap is None and not state.session_laps is None:
         if lap < 1 or (ir['IsReplayPlaying'] and ir['ReplayFrameNumEnd'] > 10):
