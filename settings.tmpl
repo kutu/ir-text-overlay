@@ -22,7 +22,7 @@
 		"position_tmpl": "{0:>15} {1} {2:3} #{3:>3}{4:>2}{5} iR{6:>4} {7}"
 	},
 
-	"rpm_speed": {
+	"speed_rpm": {
 		// rpm will build with this chars
 		"blocks": [
 			" ",
@@ -30,7 +30,20 @@
 			"\u2588"
 		],
 		// char, left-rigth border of rpm
-		"vertical_line": "\u2502"
+		"vertical_line": "\u2502",
+
+		// speed_rpm template
+		// {0} speed in kmph (3.0f mean 3 width to make it right aligned, with 0 numbers after point)
+		// {1} speed in mph
+		// {2} rpm string (2 vertical lines, and 10 blocks)
+		// {3} gear
+		// {4} fuel string, see "fuel_tmpl"
+		"speed_rpm_tmpl": "{0:3.0f}km/h{2}{3}{4}",
+
+		// fuel template
+		// {0} litres (.3f, mean 3 numbers after point)
+		// {1} gallons
+		"fuel_tmpl": "  Fuel: {0:.3f}l"
 	},
 
 	"standing": {

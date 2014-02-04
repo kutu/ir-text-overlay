@@ -147,8 +147,8 @@ def update_speed_rpm():
         else:
             rpm = low * rpm / state.rpm_min
         rpm = max(0, min(rpm, 1))
-        vert_line = settings['rpm_speed']['vertical_line']
-        blocks = settings['rpm_speed']['blocks']
+        vert_line = settings['speed_rpm']['vertical_line']
+        blocks = settings['speed_rpm']['blocks']
         rpm = vert_line + (
                 blocks[-1] * math.ceil(rpm * state.rpm_len - 1) +
                 blocks[round(rpm % (1 / state.rpm_len) * state.rpm_len * (len(blocks) - 1))]
@@ -167,11 +167,11 @@ def update_speed_rpm():
                 speed = max(0, state.track_length * diff_pct / diff_time * 1000)
                 if speed > 110:
                     speed = 0
-    speed = '{:3.0f}km/h'.format(speed * 3.6)
+    speed = speed * 3.6
 
-    fuel = '' if fuel is None else 'Fuel: {:.3f}l'.format(fuel)
+    fuel = '' if fuel is None else settings['speed_rpm']['fuel_tmpl'].format(fuel, fuel * 0.264172052)
 
-    result ='{}{}{}  {}'.format(speed, rpm, gear, fuel)
+    result = settings['speed_rpm']['speed_rpm_tmpl'].format(speed, speed * 0.621371192, rpm, gear, fuel)
     logging.debug(result)
     f_speed_rpm.seek(0)
     f_speed_rpm.write(result)
