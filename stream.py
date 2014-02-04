@@ -379,7 +379,8 @@ def update_standing():
     standing = []
 
     is_cur_session_race = state.cur_session_type == 'Race' and ir['SessionState'] >= irsdk.SessionState.RACING
-    use_pos_info = is_cur_session_race or not ir['QualifyResultsInfo']
+    is_cur_session_qual = 'Qualify' in state.cur_session_type
+    use_pos_info = is_cur_session_race or is_cur_session_qual or not ir['QualifyResultsInfo']
 
     if state.cam_car_idx in state.drivers:
         cur_car_class_id = state.drivers[state.cam_car_idx]['driver_info']['CarClassID']
