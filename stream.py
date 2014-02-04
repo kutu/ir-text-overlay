@@ -41,6 +41,7 @@ class State:
     speed_calc_data = []
 
     last_time_update_lap_ses_time = -1
+    race_start_time = -1
 
     last_time_update_drivers = -1
 
@@ -184,6 +185,17 @@ def update_lap_ses_time():
 
     session_type = state.cur_session_type or 'Session Time'
     session_time = state.cur_session_time or 0
+
+    # detect race start time
+    if state.race_start_time == -1 and state.cur_session_type == 'Race':
+        flags = ir['SessionFlags']
+        if flags & irsdk.Flags.START_GO:
+            state.race_start_time = session_time
+        elif flags & irsdk.Flags.START_HIDDEN and ir['SessionState'] >= irsdk.SessionState.RACING:
+            state.race_start_time = 0
+
+    if state.race_start_time != -1:
+        session_time -= state.race_start_time
 
     if state.my_car_idx == state.cam_car_idx:
         lap =  ir['Lap']
