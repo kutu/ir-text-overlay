@@ -11,7 +11,7 @@ import json
 import irsdk
 import twitch
 
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 
 LICENSE_CLASSES = ['R', 'D', 'C', 'B', 'A', 'P', 'WC']
 
@@ -240,7 +240,7 @@ def update_drivers():
             car_idx = d['CarIdx']
             if not car_idx in state.drivers:
                 state.drivers[car_idx] = dict(
-                    license_class = LICENSE_CLASSES[int(d['LicLevel'] / 5)],
+                    license_class = LICENSE_CLASSES[int(max(0, (d['LicLevel'] - 1)) / 4)],
                     safety_rating = '{:.2f}'.format(d['LicSubLevel'] / 100),
                     class_position = 0)
             state.drivers[car_idx]['driver_info'] = d
