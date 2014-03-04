@@ -11,7 +11,7 @@ import json
 import irsdk
 import twitch
 
-VERSION = '1.0.2'
+VERSION = '1.0.3'
 
 LICENSE_CLASSES = ['R', 'D', 'C', 'B', 'A', 'P', 'WC']
 
@@ -520,14 +520,14 @@ def update_twitch():
     # update twitch status
     if tw_state.oauth_token and tw_state.status and tw_state.status != tw_state.last_status:
         if not tw_state.twreq_status:
-            logging.info('start update twitch status')
+            logging.info('updating twitch status...')
             tw_state.twreq_status = twitch.TwitchAPIRequest(twitch.TWITCH_API_CHANNELS % tw_state.channel.lower(), 'PUT',
                 {'channel[status]': tw_state.status}, oauth_token=tw_state.oauth_token)
         if not tw_state.twreq_status.is_alive():
             if tw_state.twreq_status.error:
                 logging.warn('twitch status error: %s', tw_state.twreq_status.error)
             elif tw_state.twreq_status.result:
-                logging.info('twitch status updated: %s', tw_state.twreq_status.result['status'])
+                logging.info('twitch status updated to "%s"', tw_state.twreq_status.result['status'])
                 tw_state.last_status = tw_state.status
             tw_state.twreq_status = None
 
@@ -596,6 +596,8 @@ def main():
         logging.info('IRSDK disconnected')
         tw_state = state.twitch
         state = State()
+        if 'status_default' in settings['twitch']:
+            tw_state.status = settings['twitch']['status_default']
         state.twitch = tw_state
     elif not state.is_connected and (ir.is_initialized or ir.is_connected or ir.startup()):
         state.is_connected = True
@@ -662,7 +664,7 @@ if __name__ == '__main__':
     logging.basicConfig(format='{asctime} {levelname:>8}: {message}', datefmt='%Y-%m-%d %H:%M:%S', style='{',
         handlers=logging_handlers, level=[logging.WARN, logging.INFO, logging.DEBUG][min(args.verbose - 1, 2)])
 
-    logging.info('iRacing Text Overlay %s' % VERSION)
+    logging.info('iRacing Text Overlay %s', VERSION)
 
     settings = None
     try:

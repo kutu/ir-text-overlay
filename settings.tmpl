@@ -93,8 +93,11 @@
 		// Stream status template
 		// {0} - EventType
 		// {1} - CarClassShortName
-		// {2} - TrackDisplayShortName
+		// {2} - TrackDisplayName
 		// note: will work only with access_token
-		"status_tmpl": "{0}: {1} @ {2}"
+		// ex: "Race: GT3 @ Suzuka"
+		"status_tmpl": "{0}: {1} @ {2}",
+		// Stream status when not in simulator
+		"status_default": "iRacing"
 	}
 }
