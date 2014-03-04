@@ -95,7 +95,7 @@ def on_session_change():
     if ir['WeekendInfo'] and ir['DriverInfo']:
         state.event_type = ir['WeekendInfo']['EventType']
         if state.twitch:
-            track_name = ir['WeekendInfo']['TrackDisplayShortName']
+            track_name = ir['WeekendInfo']['TrackDisplayName']
             driver = next(d for d in ir['DriverInfo']['Drivers'] if d['CarIdx'] == state.my_car_idx)
             car_class_name = driver['CarClassShortName'] if driver['CarClassShortName'] else driver['CarPath']
             state.twitch.status = settings['twitch']['status_tmpl'].format(state.event_type, car_class_name, track_name)
