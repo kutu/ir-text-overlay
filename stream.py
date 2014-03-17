@@ -11,7 +11,7 @@ import json
 import irsdk
 import twitch
 
-VERSION = '1.0.3'
+VERSION = '1.0.3.1'
 
 LICENSE_CLASSES = ['R', 'D', 'C', 'B', 'A', 'P', 'WC']
 
@@ -596,7 +596,7 @@ def main():
         logging.info('IRSDK disconnected')
         tw_state = state.twitch
         state = State()
-        if 'status_default' in settings['twitch']:
+        if tw_state and 'status_default' in settings['twitch']:
             tw_state.status = settings['twitch']['status_default']
         state.twitch = tw_state
     elif not state.is_connected and (ir.is_initialized or ir.is_connected or ir.startup()):
@@ -657,7 +657,7 @@ if __name__ == '__main__':
     parser.add_argument('--dump', help='dump irsdk mmap to file')
     args = parser.parse_args()
 
-    logging_handlers = [logging.handlers.RotatingFileHandler('log', maxBytes=1 * 1024 * 1024, encoding='utf-8')]
+    logging_handlers = [logging.handlers.RotatingFileHandler('log', maxBytes=1024**2, backupCount=1, encoding='utf-8')]
     if not args.silent:
         logging_handlers.append(logging.StreamHandler())
 
